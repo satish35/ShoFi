@@ -3,95 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
     <style>
         body{
             background: rgb(240, 239, 243);
-            overflow-y: scroll;
-            -ms-overflow-style: none;
-            scrollbar-width: none;
         }
         .wrap{
             height: fit-content;
             width: 100%;
             display: flex;
+            flex-direction: column;
+            gap: 10px;
             align-items: center;
             position: relative;
-            top: 80px;
-        }
-        .container{
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            width: fit-content;
-            margin: 0 auto;
-        }
-        .feed{
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            padding-left: 40px;
-            justify-content: space-between;
-            gap: 5px;
-            height: fit-content;
-            max-height: 900px;
-            width: 650px;
-            border-radius: 7px;
-            margin-bottom: 12px;
-            background-color: white;
-            box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.06);
-        }
-        .video{
-            /*position: absolute;
-            bottom: 30px;
-            left: 40px;*/
-            height: fit-content;
-            width: fit-content;
-            background-color: black;
-        }
-        .plus{
-            position: absolute;
-            top: 50px;
-            margin: 0 auto;
-        }
-        #plus{
-            border: none;
-            background-color: #483D8B;
-            color: #ffffff;
-            font-weight: bold;
-        }
-        #minus{
-            border: none;
-            background-color: #483D8B;
-            color: #ffffff;
-            font-weight: bold;
-            padding: 1px 7px;
-        }
-        #vote{
-            position: absolute;
-            top: 77px;
-            color: black;
-        }
-        .votebox{
-            position: absolute;
-            height: 100%;
-            width: 40px;
-            left: 0px;
-            display: flex;
-            justify-content: center;
-            background-color: #D3D3D3;
-            border-top-left-radius: 7px;
-            border-bottom-left-radius: 7px;
         }
         #follow{
             /*position: absolute;
             top: 8px;
             right: 13px;*/
-            position: relative;
             border: none;
             border-radius: 7px;
             padding: 5px 7px;
@@ -180,21 +113,10 @@
         .autocom_box li:hover{
             background: #efefef;
         }
-        .minus{
-            position: absolute;
-            top: 99px;
-            margin: 0 auto;
-            border: none;
-            background: #483D8B;
-            color: #ffffff;
-            font-weight: bold;
-        }
         nav{
             background: gray;
             height: 60px;
             width: 100%;
-            position: fixed;
-            z-index: 999;
         }
         p{
             margin: 0;
@@ -262,46 +184,16 @@
         nav ul li ul.dropdown a:hover{
             background: #efefef;
         }
-        .details{
-            /*position: absolute;
-            left: 40px;*/
-            width: 610px;
-            height: 43px;
-            border-top-right-radius: 7px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .details1{
-            display: flex;
-            justify-content: space-between;
-        }
-        .details2{
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 5px;
-            gap: 12px;
-        }
         #Username{
             font-size: 18px;
             padding-top: 10px;
             padding-bottom: 10px;
-            padding-left: 8px;
+            padding-left: 10px;
             font-weight: bold;
         }
         #upload{
             font-size: 12px;
             padding: 15px 3px;
-        }
-        .description{
-            width: 600px;
-            height: fit-content;
-            /*position: absolute;
-            top: 44px;
-            left: 42px;*/
-            background: #F8F8F8;
-            border-radius: 8px;
-            padding: 5px 7px;
-            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
         }
         .comment{
             width: 600px;
@@ -328,7 +220,7 @@
             font-weight: bold;
             color: black;
         }
-        .comment .icon{
+        .comment_box .icon{
             /*position: absolute;
             bottom: 0;
             left: 20px;*/
@@ -337,20 +229,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-right: 3px;
-            opacity: 0.8;
-        }
-        .comment .icon2{
-            /*position: absolute;
-            bottom: 0;
-            left: 150px;*/
-            height: fit-content;
-            width: fit-content;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-right: 3px;
-            opacity: 0.8;
         }
         #describe{
             color: black;
@@ -400,12 +278,12 @@
             border-radius: 5px;
             font-weight: bold;
         }
-        .alert1 {
+        /* .alert {
             padding: 20px;
             background-color: #7B68EE;
             color: white;
             margin-bottom: 15px;
-        }
+        } */
         .closebtn {
             margin-left: 15px;
             color: white;
@@ -419,93 +297,109 @@
         .closebtn:hover {
             color: black;
         }
-        .avatar{
-            position: relative;
-            bottom: 3px;
-            left: 5px;
-            height: 100%;
-            width: 80px;
+        #comment{
+            width: 700px;
+            min-height: 80px;
         }
-        .avatar img{
-            border-radius: 50%;
-            background-color: #efefef;
-        }
-        .payment{
-            position: absolute;
-            top: 43px;
-            height: fit-content;
-            width: 250px;
+        .comment_box{
+            min-height: fit-content;
+            width: 700px;
+            padding: 10px 12px;
             border-radius: 5px;
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            background: #ffffff;
-            z-index: 999;
-            padding: 7px;
+            border: none;
+            background-color: #ffffff;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+            gap: 5px;
         }
-        #CFB53B{
+        .reply{
             position: relative; 
-            width: 100%; 
-            height: 60px; 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: center;
-            background-color: #CFB53B;
+            margin-top: 10px; 
+            float: right; 
+            height: fit-content;
+            width: 80%; 
+            background-color: #ffffff;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+            gap: 3px;
         }
-        #E6E8FA{
-            position: relative; 
-            width: 100%; 
-            height: 60px; 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: center;
-            background-color: #E6E8FA;
+        ul.dropdown_nav{
+            width: 100px;
+            height: fit-content;
+            margin: 0px;
+            padding: 0;
+            position: relative;
         }
-        #B8C7853{
-            position: relative; 
-            width: 100%; 
-            height: 60px; 
-            display: flex; 
-            flex-direction: row; 
-            justify-content: center;
-            background-color: #8C7853;
+        ul.dropdown_nav li{
+            display: block;
         }
-        #preloader{
-            background: #ffffff;
-            background-size: 50%;
-            height: 100vh;
-            width: 100%;
-            position: fixed;
-            z-index: 1000;
-            display: none;
-            opacity: 0.7;
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #483D8B !important;
+            border: none !important;
+        }
+        .nav_btn1{
+            position: relative;
+            top: 0px;
+            margin-left: 20px;
+            float: left;
+            height: fit-content;
+            width: fit-content;
+        }
+        .wallet_panel1{
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        .wallet_panel{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .history{
+            position: relative;
+            width: 80%;
+            height: fit-content;
+            background: #ffffff;
+        }
+        .table th{
+            text-align: center;
+            background: #483D8B;
+            border: 2px black solid;
+            color: #ffffff;
+        }
+        .table td{
+            text-align: center;
+            border: 1px solid black;
         }
     </style>
 </head>
-<body onload="accountBoot()">
-    <div id="preloader">
-        <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-        <div style="position: relative; padding-left: 8px;">
-            <p style="color: black; font-size: 20px; font-weight: bold;">Your transaction is under process</p>
-        </div>
-    </div>
-    {% with messages = get_flashed_messages() %}  
-        {% if messages %}  
-            {% for message in messages %}
-                <div class="alert1">
-                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                    <p style="font-size: 20px; font-weight: bold;">{{ message }}</p>  
-                </div>  
-            {% endfor %}  
-        {% endif %}  
-    {% endwith %}
+<body onload="click()">
     <nav>
         <div class="logo">
-              ShoFi
+            ShoFi
+        </div>
+        <div class="nav_btn1">
+            <ul>
+                <li>
+                    <a href="#">Wallet info <i class="fa fa-caret-down" style="font-size:15px;"></i></a>
+                    <ul class="dropdown">
+                        <li>
+                            <a href="/home">
+                                Home
+                            </a>
+                        </li>
+                        <li><a href="/popular">Popular</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         <div class="wrapper">
             <div class="search_box">
@@ -543,7 +437,7 @@
                     {% with %}  
                         {% if data2 %}
                             {% for message in data2 %}
-                                    <a href="#">Welcome<span> </span><span style="color: black; padding-left: 3px; opacity: 0.7;" id="user_diplay">{{ message['username'] }}</span></a>
+                                    <a href="#">Welcome<span style="color: black; padding-left: 3px; opacity: 0.7;"> {{ message['username'] }}</span></a>
                                     <ul class="dropdown">
                                         <li>
                                             <a href="/profile">
@@ -570,111 +464,70 @@
             </ul>
         </div>
     </nav>
-    {% block content %}{% endblock %}
-    {% block scripts %}{% endblock %}
-    <script>
-        const search=() => {
-            const searchbox= document.getElementById('search_input').value.toUpperCase();
-            const searchWrapper= document.querySelector('.search_box')
-            const suggBox= searchWrapper.querySelector('.autocom_box')
-            let emptyArray= [];
-            let startIndex;
-
-            fetch("/suggest", {
-                method: "GET"
-            }).then((response) =>{
-                return response.json()
-            }).then((data) =>{
-                setTimeout(function(){
-                    data['data'].map((name) =>{
-                        emptyArray.push(name)
-                    })
-                }, 200)
-            })
-
-            if(searchbox){
-                setTimeout(function(){
-                    emptyArray= emptyArray.filter((data) =>{
-                        if (data.toUpperCase().indexOf(searchbox) > -1){
-                            startIndex=data.toUpperCase().indexOf(searchbox);
-                            return data
-                        }
-                    });
-                    emptyArray= emptyArray.map((data) =>{
-                        if(startIndex==0){
-                            let result=[data.slice(startIndex, searchbox.length), data.slice(searchbox.length)];
-                            return '<li>'+ '<b>'+ result[0]+'</b>'+ result[1] +'</li>';
-                        }
-                        else{
-                            let result=[data.slice(0,data.toUpperCase().indexOf(searchbox)), data.slice(data.toUpperCase().indexOf(searchbox), data.toUpperCase().indexOf(searchbox)+searchbox.length), data.slice(data.toUpperCase().indexOf(searchbox)+searchbox.length)];
-                            return '<li>'+ result[0]+'<b>'+result[1]+'</b>'+result[2] +'</li>';
-                        }
-                    });
-                    searchWrapper.classList.add('active');
-                    suggestion(emptyArray);
-                },400)
-            }else{
-                searchWrapper.classList.remove('active')
-            }
-        }
-        function suggestion(list){
-            let listData;
-            const searchWrapper= document.querySelector('.search_box')
-            const suggBox= searchWrapper.querySelector('.autocom_box')
-            const searchbox= document.getElementById('search_input').value.toLowerCase();
-            if(!list.length){
-                listData= '<li>'+ 'no user found' +'</li>';
-            }else{
-                listData= list.join('');
-            }
-            suggBox.innerHTML= listData;
-            let listItem= suggBox.querySelectorAll('li')
-            for (let i = 0; i < listItem.length; i++) {
-                listItem[i].setAttribute("onclick", "select(this)");
-            }
-        }
-        function select(element){
-                value= element.textContent;
-                console.log(value)
-                const formData = new FormData();
-
-                formData.append('username', value);
-
-                fetch("/search_input", {
-                    method: "POST",
-                    body: formData
-                }).then((response) =>{
-                    console.log(response)
-                    return response.json()
-                }).then((data) =>{
-                    window.location.href= data.redirect
-                })
-            }
-    </script>
-    <script>
-        function copyURI(e) {
-            e.preventDefault();
-            navigator.clipboard.writeText(e.target.getAttribute('href')).then(() => {
-                alert('copied to clipboard');
-            }, () => {
-                alert('failed to copy');
-            });
-        }
-    </script>
+    <div class="wrap">
+        <div class="wallet_panel1">
+            <div class="wallet_panel">
+                <div style="position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 7px; width: 100%; height: 50%;">
+                    <div style="position: relative; height: 80%; width: 50%; display: flex; justify-content: center; align-items: center;">
+                        {% with %}
+                            {% if avatar %}
+                                <img style="border-radius: 50%; background-color: #efefef;" src="{{ avatar }}" width="100%" height="100%">
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    <p style="font-weight: bold; font-size: 30px;" id="username"></p>
+                </div>
+                <div style="position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 5px 7px; width: 100%; height: fit-content;">
+                    <p style="font-size: 40px; font-weight: bolder;" id="balance">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z"/></svg>
+                    </p>
+                    <p style="font-weight: lighter; font-size: 15px;" id="owner"></p>
+                </div>
+            </div>
+        </div>
+        <div class="history">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Public key</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="datas">
+                </tbody>
+            </table>
+            <!-- <p id="account"></p>
+            <p id="connect"></p>
+            <p id="transaction"></p>
+            <input type="button" value="create wallet" onclick="click()"/>
+            <input type="button" value="connect to smart contract" onclick="contractMetamask()"/>
+            <input type="button" value="get smart contract owner" onclick="readContract()"/>
+            <input type="text" id="amount" value="enter the amount to transfer"/>
+            <input type="button" value="perform transaction" onclick="performTransaction()"/>
+            <input type="button" value="show transaction" onclick="showTransaction()"/> -->
+        </div>
+    </div>
+    <div style="position: absolute; top: 80px; right: 22px; width: 400px; min-height: 40px; border-radius: 7px;">
+        <div class="alert alert-danger" role="alert">
+            <h4>
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+                    <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                    <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                </svg>
+                Notice
+            </h4>
+            <p>In case of mistransaction you can reach out to owner of contract at <b>udaiyar.satish03@gmail.com</b> mentioning your transaction details with the reason for mistransaction and if valid your ethers will be reverted within 24hrs.</p>
+        </div>
+    </div>
     <script>
         let account;
-        let public_key;
-        let username;
-        let user;
-        const accountBoot = async() =>{
+        const click = async() =>{
             if(window.ethereum !== 'undefined'){
-                    ethereum.request({method: "eth_requestAccounts"}).then((accounts) =>{
-                        account=accounts[0];
-                        console.log(account)
-                        // console.log(account);
-                        // document.getElementById('account').innerHTML= account;
+                ethereum.request({method: "eth_requestAccounts"}).then((accounts) =>{
+                    account=accounts[0];
+                    // document.getElementById('account').innerHTML= account;
                 });
-                
                 const ABI= [
 	{
 		"inputs": [],
@@ -838,57 +691,146 @@
                 window.contract = await new window.web3.eth.Contract(ABI, Address);
                 // document.getElementById('connect').innerHTML= "connected to smart contract";
                 // const data = await window.contract.methods._owner().call();
-                // const data1= await window.contract.methods.checkBalance().call();
-                // const amount= document.getElementById('amount').value;
+                setTimeout(async() => {
+                    const data1= await window.contract.methods.checkBalance(account).call();
+                    document.getElementById('owner').innerHTML= account;
+                    document.getElementById('username').innerHTML= data1[0];
+                    document.getElementById('balance').innerHTML+= `${(data1[1]/Math.pow(10, 18)).toFixed(5)} ETH`;
+                }, 100);
+
+                setTimeout(() => {
+                    window.contract.methods.getTransaction(account).call().then((data) =>{
+                        var table = document.getElementById("datas");
+                        table.innerHTML="";
+                        var tr="";
+                        data.forEach(x=>{
+                            tr+='<tr>';
+                            tr+='<td>'+x.username+'</td>'+'<td>'+x.key+'</td>'+'<td>'+`${(x.amount/Math.pow(10, 18)).toFixed(5)} ETH`+'</td>'
+                            tr+='</tr>'
+                        });
+                        table.innerHTML+=tr;
+                        // console.log(data.length);
+                        // document.getElementById('transaction').innerHTML= data;
+                    });
+                }, 100);
             }
             else{
-                alert('Install metamsk and link your wallet to support');
+                console.log('undefined');
             }
         }
-        
-        const Pay = async() =>{
-            var Id = event.target.parentNode.parentNode.id;
-            var Id2 = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
-            let user = document.getElementById("user_diplay").innerText.toLowerCase()
-            let amount = document.getElementById('i'+Id).value;
-            var loader= document.getElementById("preloader");
-            loader.style.display = "flex";
-            fetch(`/key?pid=${Id2}`, {
+
+        // const readContract = async() =>{
+        //     const data = await window.contract.methods._owner().call();
+        //     const data1= await window.contract.methods.checkBalance().call();
+        //     document.getElementById('owner').innerHTML= data;
+        //     document.getElementById('username').innerHTML= data1[0];
+        //     document.getElementById('balance').innerHTML= `${(data1[1]/Math.pow(10, 18)).toFixed(5)} ETH`;
+        // }
+
+        // const performTransaction = async() =>{
+        //     const amount= document.getElementById('amount').value;
+        //     const some= await window.contract.methods.support('0x2cc53D8bE7f5c26dA503288F78630b0E1C05bc85', 'sat55').send({from: account,value: web3.utils.toWei(amount, 'ether')});
+        //     console.log(some);
+        // }
+
+        // const showTransaction= () =>{
+        //     window.contract.methods.getTransaction(account).call().then((data) =>{
+        //         var table = document.getElementById("datas");
+        //         table.innerHTML="";
+        //         var tr="";
+        //         data.forEach(x=>{
+        //             tr+='<tr>';
+        //             tr+='<td>'+x.username+'</td>'+'<td>'+x.key+'</td>'+'<td>'+`${(x.amount/Math.pow(10, 18)).toFixed(5)} ETH`+'</td>'
+        //             tr+='</tr>'
+        //         });
+        //         table.innerHTML+=tr;
+        //         console.log(data.length);
+        //         // document.getElementById('transaction').innerHTML= data;
+        //     });
+        // }
+
+        // const walletCreate = async() =>{
+        //     await window.contract.methods.createWallet('sat53').send({from: account});
+        // }
+    </script>
+    <script>
+        const search=() => {
+            const searchbox= document.getElementById('search_input').value.toUpperCase();
+            const searchWrapper= document.querySelector('.search_box')
+            const suggBox= searchWrapper.querySelector('.autocom_box')
+            let emptyArray= [];
+            let startIndex;
+
+            fetch("/suggest", {
                 method: "GET"
             }).then((response) =>{
                 return response.json()
             }).then((data) =>{
-                console.log(data);
-                public_key = data['data'][0]['public_key'];
-                username = data['data'][0]['username'];
-                console.log(public_key);
-                window.contract.methods.support(public_key, username).send({from: account,value: web3.utils.toWei(amount, 'ether')}).then((tx) =>{
-                    console.log(tx);
-                    loader.style.display = "none";
-                    fetch(`/support_money?pid=${Id2}&amount=${amount}&username=${user}`, {
-                        method: "GET"
-                    }).then((response) =>{
-                        console.log(response.json())
-                        return response.json()
-                    }).catch((err) =>{
-                        console.log(err);
+                setTimeout(function(){
+                    data['data'].map((name) =>{
+                        emptyArray.push(name)
                     })
-                }).catch((err) =>{
-                    loader.style.display = "none";
-                    console.log(err);
-                })
+                }, 200)
             })
+
+            if(searchbox){
+                setTimeout(function(){
+                    emptyArray= emptyArray.filter((data) =>{
+                        if (data.toUpperCase().indexOf(searchbox) > -1){
+                            startIndex=data.toUpperCase().indexOf(searchbox);
+                            return data
+                        }
+                    });
+                    emptyArray= emptyArray.map((data) =>{
+                        if(startIndex==0){
+                            let result=[data.slice(startIndex, searchbox.length), data.slice(searchbox.length)];
+                            return '<li>'+ '<b>'+ result[0]+'</b>'+ result[1] +'</li>';
+                        }
+                        else{
+                            let result=[data.slice(0,data.toUpperCase().indexOf(searchbox)), data.slice(data.toUpperCase().indexOf(searchbox), data.toUpperCase().indexOf(searchbox)+searchbox.length), data.slice(data.toUpperCase().indexOf(searchbox)+searchbox.length)];
+                            return '<li>'+ result[0]+'<b>'+result[1]+'</b>'+result[2] +'</li>';
+                        }
+                    });
+                    searchWrapper.classList.add('active');
+                    suggestion(emptyArray);
+                },400)
+            }else{
+                searchWrapper.classList.remove('active')
+            }
         }
-    </script>
-    <script>
-        const Support = () =>{
-            var Id = event.target.parentNode.parentNode.parentNode.id;
-            document.getElementById('d'+Id).style.display='flex';
+        function suggestion(list){
+            let listData;
+            const searchWrapper= document.querySelector('.search_box')
+            const suggBox= searchWrapper.querySelector('.autocom_box')
+            const searchbox= document.getElementById('search_input').value.toLowerCase();
+            if(!list.length){
+                listData= '<li>'+ 'no user found' +'</li>';
+            }else{
+                listData= list.join('');
+            }
+            suggBox.innerHTML= listData;
+            let listItem= suggBox.querySelectorAll('li')
+            for (let i = 0; i < listItem.length; i++) {
+                listItem[i].setAttribute("onclick", "select(this)");
+            }
         }
-        const Cancel = () =>{
-            var Id = event.target.parentNode.parentNode.id;
-            document.getElementById(Id).style.display='none';
-        }
+        function select(element){
+                value= element.textContent;
+                console.log(value)
+                const formData = new FormData();
+
+                formData.append('username', value);
+
+                fetch("/search_input", {
+                    method: "POST",
+                    body: formData
+                }).then((response) =>{
+                    console.log(response)
+                    return response.json()
+                }).then((data) =>{
+                    window.location.href= data.redirect
+                })
+            }
     </script>
 </body>
 </html>

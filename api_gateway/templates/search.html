@@ -6,9 +6,14 @@
                 {% if user %}
                     {% for message in user %}
                         <div class="panel1" id="{{ message['uid'] }}">
-                            <h2 style="margin: 0; padding: 8px 10px; position: absolute; top: 0; left: 8px; font-weight: bold; font-size: 40px;">{{ message['username'] }}</h2>
-                            <p style="position: absolute; bottom: 0; left: 8px; padding: 8px 10px; font-size: 17px;">{{ message['first_name'] }} {{ message['last_name'] }}</p>
-                            <input type="button" value="{{ message['follow_status'] }}" id="follow1" onclick="Follow()" />
+                            <div class="avatar">
+                                <img src="{{ message['avatar'] }}" width="100%" height="100%">
+                            </div>
+                            <h2 style="margin: 0; padding: 8px 10px; position: absolute; top: 0; left: 85px; font-weight: bold; font-size: 40px;">{{ message['username'] }}</h2>
+                            <p style="position: absolute; bottom: 0; left: 85px; padding: 8px 10px; font-size: 17px;">{{ message['first_name'] }} {{ message['last_name'] }}</p>
+                            {% if message['self'] %}
+                                <input type="button" value="{{ message['follow_status'] }}" id="follow1" onclick="Follow()" />
+                            {% endif %}
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -29,9 +34,33 @@
             {% with %}  
                 {% if data %}
                     {% for message in data %}
-                        <div class="feed" id="{{ message['uid'] }}">
+                        <div class="feed" id="{{ message['post_id'] }}">
                             <div class="details">
                                 <p style="font-size: 15px; padding-top: 13px; padding-left: 10px;">posted {{ message['hours'] }} hours ago</p>
+                                {% if message['self'] %}
+                                    <div class="details2">
+                                        <input type="button" value="support" id="follow" onclick="Support()" />
+                                        <div class="payment" id="d{{ message['post_id'] }}">
+                                            <div class="alert alert-danger" role="alert">
+                                                <h5>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+                                                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                                                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                                                    </svg>
+                                                    Notice
+                                                </h5>
+                                                <p style="line-height: 1;">Your are entering the amount in ether, if your balance is less then the amount your are entering the transaction will be cancelled automatically</p>
+                                            </div>
+                                            <div>
+                                                <input type="number" class="form-control" placeholder="Enter the amount to transfer" id="id{{ message['post_id'] }}"/>
+                                            </div>
+                                            <div style="display: flex; width: 100%; height: fit-content; flex-direction: row; justify-content: space-evenly;">
+                                                <input type="button" id="follow" style="width: 80px; font-size: 15px;" value="cancel" onclick="Cancel()"/>
+                                                <input type="button" id="follow" style="width: 80px; font-size: 15px;" value="pay" onclick="Pay()"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="description">
                                 <p id="describe">{{ message['description'] }}</p>
@@ -60,11 +89,11 @@
                                 </div>
                             </div>
                             <div class="votebox">
-                                <div class="plus" id="{{ message['post_id'] }}">
+                                <div class="plus">
                                     <input type="button" value="+" onclick="Vote('plus')" id="plus" />
                                 </div>
                                 <p id="vote">{{ message['net_vote'] }}</p>
-                                <div class="minus" id="{{ message['post_id'] }}">
+                                <div class="minus">
                                     <input type="button" value="-" onclick="Vote('minus')" id="minus" />
                                 </div>
                             </div>
@@ -74,6 +103,42 @@
             {% endwith %}
         </div>
     </div>
+    {% with %}
+        {% if profile %}
+            {% for message in profile %}
+                <div style="position: fixed; top: 80px; right: 22px; width: 400px; min-height: 40px; background-color: #ffffff; border-radius: 7px;">
+                    <div style="position: relative; top: 0; border-top-left-radius: 7px; border-top-right-radius: 7px; display: flex; width: 100%; height: 40px; justify-content: center; align-items: center; font-size: 20px; font-weight: bold; color: #ffffff; background: #483D8B;">
+                        Profile
+                    </div>
+                    <div style="position: relative; padding: 5px 7px;">
+                        <p style="font-weight: bold; font-size: 20px; padding-left: 5px; padding-top: 7px;">Bio</p>
+                        <div style="position: relative; width: 100%; height: fit-content; background: #f8f8f8; border-radius: 8px; padding: 5px 7px; box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2); ">
+                            <p style="font-size: 16px; line-height: 1;">{{ message['bio'] }}</p>
+                        </div>
+                        <p style="font-weight: bold; font-size: 20px; padding-left: 5px; padding-top: 7px;">Reach out at</p>
+                        <div style=" position: relative; margin-top: 5px; display: flex; justify-content: center; align-items: center; border-radius: 8px; width: 100%; height: fit-content; padding: 5px 7px; background: #f8f8f8; gap: 4px; box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="black" class="bi bi-envelope" viewBox="0 0 16 16">
+                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                            </svg>
+                            <p>{{ message['email'] }}</p>
+                        </div>
+                        <div style=" position: relative; margin-top: 5px; display: flex; justify-content: center; align-items: center; border-radius: 8px; width: 100%; height: fit-content; padding: 5px 7px; background: #f8f8f8; gap: 4px; box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="black" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                            </svg>
+                            <p>{{ message['whatsapp'] }}</p>
+                        </div>
+                        <div style=" position: relative; margin-top: 5px; display: flex; justify-content: center; align-items: center; border-radius: 8px; width: 100%; height: fit-content; padding: 5px 7px; background: #f8f8f8; gap: 4px; box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="black" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                            </svg>
+                            <p>{{ message['twitter'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 {% endblock %}
 {% block scripts %}
     <script>
@@ -102,7 +167,7 @@
     </script>
     <script>
         const Vote = (vote) =>{
-            var rowId = event.target.parentNode.id;
+            var rowId = event.target.parentNode.parentNode.parentNode.id;
             // create own form in memory
             const formData = new FormData();
 

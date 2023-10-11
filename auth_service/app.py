@@ -52,7 +52,9 @@ def register():
                 "uid": uuid.uuid4().hex,
                 "first_name": data['first_name'],
                 "last_name": data['last_name'],
+                "wallet": 0,
                 "email": data['email'],
+                "avatar": data['avatar'],
                 "username": data['username'],
                 "password": hashed_password
             }) 

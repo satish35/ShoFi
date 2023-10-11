@@ -18,11 +18,36 @@
             {% with %}  
                 {% if data %}
                     {% for message in data %}
-                        <div class="feed" id="{{ message['uid'] }}">
+                        <div class="feed" id="{{ message['post_id'] }}">
                             <div class="details">
                                 <div class="details1">
+                                    <div style="position: relative; top: 3px; height: 90%; width: 45px; padding-left: 5px; display: flex; justify-content: center; align-items: center;">
+                                        <img style="border-radius: 50%; background-color: #efefef; border: 1px solid black; " src="{{ message['avatar'] }}" width="100%" height="100%">
+                                    </div>
                                     <p id="Username">Posted by {{ message['username'] }}</p>
                                     <p id="upload">{{ message['hours'] }} hours ago</p>
+                                </div>
+                                <div class="details2">
+                                    <input type="button" value="support" id="follow" onclick="Support()" />
+                                    <div class="payment" id="d{{ message['post_id'] }}">
+                                        <div class="alert alert-danger" role="alert">
+                                            <h5>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+                                                    <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                                                    <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                                                </svg>
+                                                Notice
+                                            </h5>
+                                            <p style="line-height: 1;">Your are entering the amount in ether, if your balance is less then the amount your are entering the transaction will be cancelled automatically</p>
+                                        </div>
+                                        <div>
+                                            <input type="number" class="form-control" placeholder="Enter the amount to transfer" id="id{{ message['post_id'] }}"/>
+                                        </div>
+                                        <div style="display: flex; width: 100%; height: fit-content; flex-direction: row; justify-content: space-evenly;">
+                                            <input type="button" id="follow" style="width: 80px; font-size: 15px;" value="cancel" onclick="Cancel()"/>
+                                            <input type="button" id="follow" style="width: 80px; font-size: 15px;" value="pay" onclick="Pay()"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="description">
@@ -52,11 +77,11 @@
                                 </div>
                             </div>
                             <div class="votebox">
-                                <div class="plus" id="{{ message['post_id'] }}">
+                                <div class="plus">
                                     <input type="button" value="+" onclick="Vote('plus')" id="plus" />
                                 </div>
                                 <p id="vote">{{ message['net_vote'] }}</p>
-                                <div class="minus" id="{{ message['post_id'] }}">
+                                <div class="minus">
                                     <input type="button" value="-" onclick="Vote('minus')" id="minus" />
                                 </div>
                             </div>
@@ -66,11 +91,30 @@
             {% endwith %}
         </div>
     </div>
+    <div style="position: fixed; top: 80px; left: 17px; width: 400px; min-height: fit-content; background-color: #ffffff; border-radius: 7px;">
+        <div style="position: relative; top: 0; border-top-left-radius: 7px; border-top-right-radius: 7px; display: flex; width: 100%; height: 40px; justify-content: center; align-items: center; font-size: 20px; font-weight: bold; color: #ffffff; background: #483D8B;">
+            Top News
+        </div>
+        <div style="position: relative; width: 100%; height: 620px; padding: 5px 7px; overflow-y:scroll;">
+        {% with %}
+            {% if top_news %}
+                {% for message in top_news %}
+                    <div style="position: relative; width: 100%; min-height: fit-content; display: flex; flex-direction: row; padding: 3px 5px; padding: 3px 5px; background-color: #f8f8f8; box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);margin-bottom: 5px;">
+                        <div style="width: 100px; padding: 7px 5px; display: flex; justify-content: center; align-items: center;">
+                            <img style="background-color: #efefef; border:none " src="{{ message['media'] }}" width="100%" height="100%">
+                        </div>
+                        <div style=" width: 300px; display: flex; justify-content: center; align-items: center; padding: 3px 5px; font-size: 15px; line-height: 1; font-family: Verdana, Geneva, Tahoma, sans-serif; font-weight: bold;">{{ message['excerpt'] }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </div>
+    </div>
 {% endblock %}
 {% block scripts %}
     <script>
         const Vote = (vote) =>{
-            var rowId = event.target.parentNode.id;
+            var rowId = event.target.parentNode.parentNode.parentNode.id;
             // create own form in memory
             const formData = new FormData();
 

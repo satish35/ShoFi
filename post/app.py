@@ -21,6 +21,7 @@ def post():
                 'uid': data['uid'],
                 'video': data['filename'],
                 'description': data['description'],
+                'public_key': data['public_key'],
                 'voters_id': [],
                 'uploaded_on': datetime.datetime.now(None),
                 'net_vote': 0
@@ -55,8 +56,8 @@ def post():
     else:
         pass
 
-@app.route('/video/<pid>')
-def video(pid):
+@app.route('/video/<pid>/<uid>')
+def video(pid, uid):
     try:
         result=[]
         res=mongo.db.post.find_one({
@@ -65,12 +66,17 @@ def video(pid):
         res1=mongo.db.user.find_one({
             "uid": res['uid']
         })
+        if res['uid'] == uid:
+            res.update({'self': False})
+        else:
+            res.update({'self': True})
         res.pop('_id')
         tx_info=res['uploaded_on'].tzinfo
         difference=datetime.datetime.now(tx_info)-res['uploaded_on']
         days=divmod(difference.total_seconds(), 3600)
         res['hours']=int(days[0])
         res['username']=res1['username']
+        res['avatar']=res1['avatar']
         result.append(res)
         return make_response(jsonify({
             'status': 'success',
@@ -122,6 +128,7 @@ def feed(uid):
                             "_id": 0,
                             "uid": 1,
                             "username": "$user_info.username",
+                            "avatar": "$user_info.avatar",
                             "post_id": "$post_info.post_id",
                             "video": "$post_info.video",
                             "uploaded_on": "$post_info.uploaded_on",
@@ -157,6 +164,33 @@ def feed(uid):
               'message': str(err)
          }))
     
+@app.route('/top')
+def top():
+    try:
+        top=[]
+        color=['CFB53B', 'E6E8FA', 'B8C7853']
+        res=mongo.db.post.find().sort("net_vote", -1).limit(3)
+        for data in res:
+            res2=mongo.db.user.find_one({
+                'uid': data['uid']
+            })
+            data.update({'username': res2['username']})
+            data.update({'avatar': res2['avatar']})
+            data.pop('_id')
+            top.append(data)
+        for i in range(0,len(top)):
+            top[i].update({'color': color[i]})
+        return make_response(jsonify({
+            'status': 'success',
+            'data': top
+        }))
+    except Exception as err:
+        return make_response(jsonify({
+            'status': 'error',
+            'message': str(err)
+        }),500)
+
+    
 @app.route('/popular_feed/<uid>')
 def top_feed(uid):
     try:
@@ -173,7 +207,12 @@ def top_feed(uid):
             user=mongo.db.user.find_one({
                 "uid": data['uid']
             })
+            if data['uid'] == uid:
+                data.update({'self': False})
+            else:
+                data.update({'self': True})
             data.update({'username': user['username']})
+            data.update({'avatar': user['avatar']})
             data.pop('_id')
             if res1 is None:
                 data.update({'follow_status': 'follow'})
@@ -231,6 +270,18 @@ def vote():
                         }
                     }
                 mongo.db.post.update_one(query_find, query_update)
+                res5=mongo.db.user.find_one({
+                    "uid": data['uid']
+                })
+                mongo.db.notification.insert_one({
+                    'username': res5['username'],
+                    'avatar': res5['avatar'],
+                    'r_id': res['uid'],
+                    'action': 'voted',
+                    'message_post': res['description'],
+                    'time': datetime.datetime.now(None),
+                    'view': 0
+                })
                 return make_response(jsonify({
                     'status': 'success',
                     'message': 'voted successfully'
@@ -249,10 +300,14 @@ def comment():
         try:
             c_id=uuid.uuid4().hex
             data= request.get_json()
+            avatar=mongo.db.user.find_one({
+                'uid': data['uid']
+            })
             res1=mongo.db.user_comment.insert_one({
                 'uid': data['uid'],
                 'comment_id': c_id,
                 'username': data['username'],
+                'avatar': avatar['avatar'],
                 'comment': data['comment'],
                 'commented_on': datetime.datetime.now(None),
                 'replyed_by': []
@@ -260,10 +315,23 @@ def comment():
             res=mongo.db.comment.find_one({
                 "post_id": data['pid']
             })
+            res3=mongo.db.post.find_one({
+                'post_id': data['pid']
+            })
             if res is None:
                 mongo.db.comment.insert_one({
                     "post_id": data['pid'],
                     "comment": [c_id]
+                })
+                mongo.db.notification.insert_one({
+                    'username': data['username'],
+                    'avatar': avatar['avatar'], 
+                    'r_id': res3['uid'],
+                    'action': 'commented',
+                    'comment': data['comment'],
+                    'message_post': res3['description'],
+                    'time': datetime.datetime.now(None),
+                    'view': 0
                 })
                 return make_response(jsonify({
                     'status': 'success',
@@ -275,6 +343,16 @@ def comment():
                     "comment": c_id
                 }}
                 mongo.db.comment.update_one(query_find, query_update)
+                mongo.db.notification.insert_one({
+                    'username': data['username'],
+                    'avatar': avatar['avatar'], 
+                    'r_id': res3['uid'],
+                    'action': 'commented',
+                    'comment': data['comment'],
+                    'message_post': res3['description'],
+                    'time': datetime.datetime.now(None),
+                    'view': 0
+                })
                 return make_response(jsonify({
                     'status': 'success',
                     'message': 'commented successfully'
@@ -318,6 +396,7 @@ def comment():
                             "_id": 0,
                             "comment_id": "$comment_info.comment_id",
                             "username": "$comment_info.username",
+                            "avatar": "$comment_info.avatar",
                             "comment": "$comment_info.comment",
                             "commented_on": "$comment_info.commented_on",
                             "replyed_by": "$comment_info.replyed_by"
@@ -361,10 +440,14 @@ def reply():
     try:
         c_id=uuid.uuid4().hex
         data=request.get_json()
+        avatar=mongo.db.user.find_one({
+            'uid': data['uid']
+        })
         res1=mongo.db.user_comment.insert_one({
             'uid': data['uid'],
             'comment_id': c_id,
             'username': data['username'],
+            'avatar': avatar['avatar'],
             'comment': data['comment'],
             'commented_on': datetime.datetime.now(None),
             'replyed_by': []
@@ -393,6 +476,108 @@ def reply():
             'message': 'something went wrong'
         }),500)
 
+@app.route('/avatar/<username>')
+def avatar(username):
+    try:
+        res=mongo.db.user.find_one({
+            "username": username
+        })
+        return make_response(jsonify({
+            'status': 'success',
+            'data': res['avatar']
+        }))
+    except Exception as err:
+        return make_response(jsonify({
+            'status': 'error',
+            'message': str(err)
+        }))
+    
+@app.route('/wallet_init', methods=['POST', 'GET'])
+def wallet_init():
+    try:
+        if request.method == 'POST':
+            data= request.get_json()
+            query_find={"username": data['username']}
+            query_update={ "$set": {
+                "wallet": 1
+            }}
+            mongo.db.user.update_one(query_find, query_update)
+            return make_response(jsonify({
+                'status': 'success',
+                'message': 'done'
+            }))
+        else:
+            data= request.args.to_dict(flat=True)
+            res= mongo.db.user.find_one({
+                "username": data['username']
+            })
+            res.pop('_id')
+            res.pop('password')
+            return make_response(jsonify({
+                'status': 'success',
+                'data': res
+            }))
+    except Exception as err:
+        return make_response(jsonify({
+            'status': 'error',
+            'message': str(err)
+        }))
+    
+@app.route('/get_key')
+def key():
+    try:
+        result=[]
+        data = request.args.to_dict(flat=True)
+        res= mongo.db.post.find_one({
+            "post_id": data['pid']
+        })
+        res1= mongo.db.user.find_one({
+            "uid": res['uid']
+        })
+        data = dict({'public_key': res['public_key'], 'username': res1['username']})
+        result.append(data)
+        return make_response(jsonify({
+            'status': 'success',
+            'data': result
+        }))
+    except Exception as err:
+        return make_response(jsonify({
+            'status': 'error',
+            'message': str(err)
+        }))
+    
+@app.route('/support', methods=['POST', 'GET'])
+def support():
+    try:
+        if request.method == 'POST':
+            data= request.get_json()
+            res= mongo.db.post.find_one({
+                'post_id': data['pid']
+            })
+            res1= mongo.db.user.find_one({
+                'username': data['username']
+            })
+            mongo.db.notification.insert_one({
+                'username': data['username'],
+                'avatar': res1['avatar'],
+                'r_id': res['uid'],
+                'action': 'supported',
+                'comment': 'with {} ethers'.format(data['amount']),
+                'message_post': res['description'],
+                'time': datetime.datetime.now(None),
+                'view': 0
+            })
+            return make_response(jsonify({
+                'status': 'success',
+                'message': 'successfully added'
+            }))
+        else:
+            pass
+    except Exception as err:
+        return make_response(jsonify({
+            'status': 'error',
+            'message': str(err)
+        }))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)

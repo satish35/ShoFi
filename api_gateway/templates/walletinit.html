@@ -3,52 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
     <style>
         body{
             background: rgb(240, 239, 243);
         }
-        .form-submit{
-            margin: 100px auto;
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 500px;
-            background-color: #FFFFF9;
-            box-shadow: -10px -10px 10px rgba(239, 239, 239, 0.2),
-                        15px 15px 15px rgba(0, 0, 0, 0.1);
-        }
-        .form-submit .form-group{
-            padding: 10px;
-        }
-        .form-submit .form-group input{
-            border: black 1px solid;
-        }
-        .form-submit .form-group textarea{
-            border: black 1px solid;
-        }
-        .form-submit .form-group .form-control{
-            background: rgb(240, 239, 243);
-        }
-        .form-submit .form-group label{
-            color: black;
-            padding: 2px;
-        }
-        .text-center{
+        .wrap{
+            height: fit-content;
             width: 100%;
-            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            top: 100px;
         }
-        input[type=file]::file-selector-button {
+        .message1{
+            position: relative;
+            width: 35%;
+            height: 270px;
+            padding: 5px 7px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        .message{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #follow{
+            /*position: absolute;
+            top: 8px;
+            right: 13px;*/
             border: none;
-            border-radius: .2em;
+            border-radius: 7px;
+            padding: 5px 7px;
             background-color: #483D8B;
             color: white;
+            font-weight: bold;
         }
-        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
-            background-color: #483D8B !important;
-            border: none !important;
+        #follow1{
+            position: absolute;
+            top: 19px;
+            right: 20px;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 10px;
+            background-color: #483D8B;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
         }
         .wrapper{
             max-width: 600px;
@@ -118,11 +130,6 @@
         }
         .autocom_box li:hover{
             background: #efefef;
-        }
-        .minus{
-            position: absolute;
-            top: 99px;
-            margin: 0 auto;
         }
         nav{
             background: gray;
@@ -195,12 +202,106 @@
         nav ul li ul.dropdown a:hover{
             background: #efefef;
         }
-        .alert1 {
+        #Username{
+            font-size: 18px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 10px;
+            font-weight: bold;
+        }
+        #upload{
+            font-size: 12px;
+            padding: 15px 3px;
+        }
+        .comment{
+            width: 600px;
+            height: 27px;
+            display: flex;
+            flex-direction: row;
+            padding-left: 10px;
+            /*position: absolute;
+            bottom: 0;*/
+            left: 42px;
+            background: #F8F8F8;
+            border-radius: 3px;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+        .cover{
+            display: flex;
+            flex-direction: row;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        .comment a{
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            color: black;
+        }
+        .comment_box .icon{
+            /*position: absolute;
+            bottom: 0;
+            left: 20px;*/
+            height: fit-content;
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #describe{
+            color: black;
+            font-size: 19px;
+            font-family: Serif;
+            line-height: 1;
+        }
+        .panel{
+            position: relative;
+            width: 100%;
+            height: 60px;
+            background-color: #ffffff;
+            margin-bottom: 12px;
+            border-radius: 7px;
+            padding-top: 7px;
+            box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.06);
+        }
+        .panel1{
+            position: relative;
+            width: 100%;
+            height: 80px;
+            background-color: #ffffff;
+            margin-bottom: 12px;
+            border-radius: 7px;
+            padding-top: 7px;
+            box-shadow: 4px 4px 30px rgba(0, 0, 0, 0.06);
+        }
+        ul.panel_btn{
+            display: flex;
+            justify-content: space-between;
+        }
+        ul.panel_btn li{
+            display: inline-block;
+            position: relative;
+        }
+        ul.panel_btn li a{
+            display: block;
+            margin-right: 40px;
+            background: #483D8B;
+            padding: 10px 15px;
+            width: 150px;
+            font-size: 17px;
+            color: #ffffff;
+            text-transform: capitalize;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        /* .alert {
             padding: 20px;
             background-color: #7B68EE;
             color: white;
             margin-bottom: 15px;
-        }
+        } */
         .closebtn {
             margin-left: 15px;
             color: white;
@@ -214,27 +315,88 @@
         .closebtn:hover {
             color: black;
         }
-        .nav_btn ul li ul.dropdown a{
-            display: flex;
+        #comment{
+            width: 700px;
+            min-height: 80px;
+        }
+        .comment_box{
+            min-height: fit-content;
+            width: 700px;
+            padding: 10px 12px;
+            border-radius: 5px;
+            border: none;
+            background-color: #ffffff;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+            gap: 5px;
+        }
+        .reply{
+            position: relative; 
+            margin-top: 10px; 
+            float: right; 
+            height: fit-content;
+            width: 80%; 
+            background-color: #ffffff;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+            gap: 3px;
+        }
+        ul.dropdown_nav{
+            width: 100px;
+            height: fit-content;
+            margin: 0px;
+            padding: 0;
+            position: relative;
+        }
+        ul.dropdown_nav li{
+            display: block;
+        }
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #483D8B !important;
+            border: none !important;
+        }
+        .nav_btn1{
+            position: relative;
+            top: 0px;
+            margin-left: 20px;
+            float: left;
+            height: fit-content;
+            width: fit-content;
+        }
+        #preloader{
+            background: #ffffff;
+            background-size: 50%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index: 1000;
+            display: none;
+            opacity: 0.7;
             justify-content: center;
             align-items: center;
         }
     </style>
 </head>
-<body>
-    {% with messages = get_flashed_messages() %}  
-        {% if messages %}  
-            {% for message in messages %}  
-                <div class="alert1">
-                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                    <p style="font-size: 20px; font-weight: bold;">{{ message }}</p>  
-                </div>  
-            {% endfor %}  
-        {% endif %}  
-    {% endwith %}
+<body onload="walletInit()">
     <nav>
         <div class="logo">
             ShoFi
+        </div>
+        <div class="nav_btn1">
+            <ul>
+                <li>
+                    <a href="#">Wallet info <i class="fa fa-caret-down" style="font-size:15px;"></i></a>
+                    <ul class="dropdown">
+                        <li>
+                            <a href="/home">
+                                Home
+                            </a>
+                        </li>
+                        <li><a href="/popular">Popular</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
         <div class="wrapper">
             <div class="search_box">
@@ -266,21 +428,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">Upload <i class="fa fa-caret-down" style="font-size:15px;"></i></a>
-                    <ul class="dropdown">
-                        <li>
-                            <a href="/home">
-                                Home
-                            </a>
-                        </li>
-                        <li><a href="/popular">Popular</a></li>
-                    </ul>
+                    <a href="{{url_for('upload')}}">upload</a>
                 </li>
                 <li>
                     {% with %}  
                         {% if data2 %}
                             {% for message in data2 %}
-                                    <a href="#">Welcome<span style="color: black; padding-left: 3px; opacity: 0.7;"> {{ message['username'] }}</span></a>
+                                    <a href="#">Welcome<span style="color: black; padding-left: 3px; opacity: 0.7;" id="name"> {{ message['username'] }}</span></a>
                                     <ul class="dropdown">
                                         <li>
                                             <a href="/profile">
@@ -307,38 +461,230 @@
             </ul>
         </div>
     </nav>
-    <div style="position: relative; padding: 10px;">
-        <div class="alert alert-danger" role="alert">
-            <h5>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
-                    <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
-                    <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
-                </svg>
-                Notice
-            </h5>
-            <p style="font-size: 18px;">Please link your wallet with metamask account before uploading the video otherwise you will not be able to receive ethers.</p>
+    <div id="preloader">
+        <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div style="position: relative; padding-left: 8px;">
+            <p style="color: black; font-size: 20px; font-weight: bold;">Initializing your wallet it may take some time</p>
         </div>
     </div>
-    <div class="container">
-        {% with %}
-            {% if wallet %}
-                <form action = "/upload" method = "POST" enctype=multipart/form-data class="form-submit">
-                    <div class="form-group">
-                        <label for="video">Upload video</label>
-                        <input type="file" class="form-control" id="video" name = "file">
-                    </div>
-                    <div class="form-group">
-                        <label for="describe">Description</label>
-                        <textarea class="form-control" id="describe" rows="3" name="description" placeorder="Description"></textarea>
-                    </div> 
-                    <div class="text-center">
-                        <input type = "submit" style="width: 100%;" value="Submit" class="btn btn-primary btn-block btn-block">
-                    </div>
-                    <input type="hidden" value="{{ wallet['wallet'] }}" id="walid" name="public_key"/>
-                </form>
-            {% endif %}
-        {% endwith %}
+    <div class="wrap">
+        <div class="message1">
+            <div class="message">
+                <div>
+                    <p style="font-size: 25px; font-weight: bold; text-align: center; line-height: 1;">No wallet initialized for this account click the below button to link your wallet</p>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <input type="button" style="background: #483D8B; color: #ffffff; border: none; border-radius: 5px; width: 25%; height: 40px; padding: 3px 5px; display: flex; justify-content: center; align-items: center; font-size: 18px;" value="+ Link Wallet" onclick="linkWallet()"/>
+                </div>
+            </div>
+        </div>
     </div>
+    <script>
+        let account;
+        let username = document.getElementById('name').innerText.toLowerCase();
+        const walletInit = async() =>{
+            if(window.ethereum !== 'undefined'){
+                    ethereum.request({method: "eth_requestAccounts"}).then((accounts) =>{
+                        account=accounts[0];
+                        console.log(account);
+                        // document.getElementById('account').innerHTML= account;
+                });
+                const ABI= [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"name": "Response",
+		"type": "event"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"inputs": [],
+		"name": "_owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "checkBalance",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "user",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct WalletManage.Wallet",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			}
+		],
+		"name": "createWallet",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "getTransaction",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct WalletManage.TranscationHistory[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "refundTransfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "j",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			}
+		],
+		"name": "support",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	}
+];
+                const Address= "0xAb5df0B83B21fb5Af854fBb93dd68Ccd14bC412B";
+                window.web3= await new Web3(window.ethereum);
+                window.contract = await new window.web3.eth.Contract(ABI, Address);
+                // document.getElementById('connect').innerHTML= "connected to smart contract";
+                // const data = await window.contract.methods._owner().call();
+                // const data1= await window.contract.methods.checkBalance().call();
+            }
+            else{
+                console.log('undefined');
+            }
+        }
+
+        const linkWallet = () =>{
+            var loader= document.getElementById("preloader");
+            loader.style.display = "flex";
+
+            window.contract.methods.createWallet(username).send({from: account}).then((tx) =>{
+               console.log(tx);
+               fetch("/wallet_init", {
+                    method: "GET"
+                }).then((response) =>{
+                    console.log(response)
+                    return response.json()
+                }).then((data) =>{
+                    loader.style.display = "none";
+                    window.location.href= data.redirect
+                }).catch((err) =>{
+                    loader.style.display = "none";
+                    console.log(err);
+                }) 
+            }).catch((err) =>{
+                loader.style.display = "none";
+                console.log(err);
+            });
+        }
+    </script>
     <script>
         const search=() => {
             const searchbox= document.getElementById('search_input').value.toUpperCase();
@@ -390,7 +736,6 @@
             const suggBox= searchWrapper.querySelector('.autocom_box')
             const searchbox= document.getElementById('search_input').value.toLowerCase();
             if(!list.length){
-                value= searchbox;
                 listData= '<li>'+ 'no user found' +'</li>';
             }else{
                 listData= list.join('');
@@ -418,25 +763,6 @@
                     window.location.href= data.redirect
                 })
             }
-    </script>
-    <script>
-        const pubilcKeyinit = () =>{
-            let data = document.getElementById('walid').value;
-            if(window.ethereum !== 'undefined'){
-                if( Number(data) != 0){
-                    ethereum.request({method: "eth_requestAccounts"}).then((accounts) =>{
-                        document.getElementById('walid').value = accounts[0];
-                    });
-                }
-                else{
-                    alert('Link your wallet to metamask account to receive support');
-                }
-            }
-            else{
-                alert('Install metamask to link your wallet to metamask account');
-            }
-        }
-        window.onload= pubilcKeyinit();
     </script>
 </body>
 </html>

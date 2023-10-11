@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7-rc.0/web3.min.js"></script>
     <style>
         body{
             background: rgb(240, 239, 243);
@@ -86,9 +87,9 @@
             border-bottom-left-radius: 7px;
         }
         #follow{
-            position: absolute;
+            /*position: absolute;
             top: 8px;
-            right: 13px;
+            right: 13px;*/
             border: none;
             border-radius: 7px;
             padding: 5px 7px;
@@ -270,6 +271,12 @@
             display: flex;
             justify-content: space-between;
         }
+        .details2{
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 5px;
+            gap: 12px;
+        }
         #Username{
             font-size: 18px;
             padding-top: 10px;
@@ -375,7 +382,7 @@
             border-radius: 5px;
             font-weight: bold;
         }
-        .alert {
+        .alert1 {
             padding: 20px;
             background-color: #7B68EE;
             color: white;
@@ -443,13 +450,38 @@
             height: fit-content;
             width: fit-content;
         }
+        .payment{
+            position: absolute;
+            top: 43px;
+            height: fit-content;
+            width: 250px;
+            border-radius: 5px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            background: #ffffff;
+            z-index: 999;
+            padding: 7px;
+        }
+        #preloader{
+            background: #ffffff;
+            background-size: 50%;
+            height: 100vh;
+            width: 100%;
+            position: fixed;
+            z-index: 1000;
+            display: none;
+            opacity: 0.7;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
-<body>
+<body onload="accountBoot()">
     {% with messages = get_flashed_messages() %}  
         {% if messages %}  
             {% for message in messages %}  
-                <div class="alert">
+                <div class="alert1">
                     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                     <p style="font-size: 20px; font-weight: bold;">{{ message }}</p>  
                 </div>  
@@ -458,14 +490,18 @@
     {% endwith %}
     <nav>
         <div class="logo">
-              AiFlix
+            ShoFi
         </div>
         <div class="nav_btn1">
             <ul>
                 <li>
                     <a href="#">Comment <i class="fa fa-caret-down" style="font-size:15px;"></i></a>
                     <ul class="dropdown">
-                        <li><a href="/home">Home</a></li>
+                        <li>
+                            <a href="/home">
+                                Home
+                            </a>
+                        </li>
                         <li><a href="/popular">Popular</a></li>
                     </ul>
                 </li>
@@ -484,6 +520,23 @@
         <div class="nav_btn">
             <ul>
                 <li>
+                    <a href="{{url_for('notify')}}">
+                        {% with %}
+                            {% if count1 %}
+                                <div style="width: fit-content; height: fit-content; padding: 1px 3px; background-color: red; position: absolute; top: 5px; left: 25px; color: #ffffff; font-size: 10px; border-radius: 5px;">{{ count1 }}</div>
+                            {% endif %}
+                        {% endwith %}
+                        <i class="fa fa-bell" style="font-size:20px;" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{url_for('wallet')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="#ffffff" class="bi bi-wallet" viewBox="0 0 17 17">
+                            <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z"/>
+                        </svg>
+                    </a>
+                </li>
+                <li>
                     <a href="{{url_for('upload')}}">upload</a>
                 </li>
                 <li>
@@ -492,7 +545,23 @@
                             {% for message in data2 %}
                                     <a href="#">Welcome<span style="color: black; padding-left: 3px; opacity: 0.7;"> {{ message['username'] }}</span></a>
                                     <ul class="dropdown">
-                                        <li><a href="/logout">Logout</a></li>
+                                        <li>
+                                            <a href="/profile">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="black" class="bi bi-person" viewBox="0 0 16 16">
+                                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                                                </svg>
+                                                <span>Profile</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="/logout">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                                </svg>
+                                                <span>Logout</span>
+                                            </a>
+                                        </li>
                                     </ul>
                             {% endfor %}
                         {% endif %}
@@ -501,17 +570,52 @@
             </ul>
         </div>
     </nav>
+    <div id="preloader">
+        <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div style="position: relative; padding-left: 8px;">
+            <p style="color: black; font-size: 20px; font-weight: bold;">Your transaction is under process</p>
+        </div>
+    </div>
     <div class="wrap">
         <div class="container">
             {% with %}  
                 {% if data %}
                     {% for message in data %}
-                        <div class="feed" id="{{ message['uid'] }}">
+                        <div class="feed" id="{{ message['post_id'] }}">
                             <div class="details">
                                 <div class="details1">
+                                    <div style="position: relative; top: 3px; height: 90%; width: 45px; padding-left: 5px; display: flex; justify-content: center; align-items: center;">
+                                        <img style="border-radius: 50%; background-color: #efefef; border: 1px solid black; " src="{{ message['avatar'] }}" width="100%" height="100%">
+                                    </div>
                                     <p id="Username">Posted by {{ message['username'] }}</p>
                                     <p id="upload">{{ message['hours'] }} hours ago</p>
                                 </div>
+                                {% if message['self'] %}
+                                    <div class="details2">
+                                        <input type="button" value="support" id="follow" onclick="Support()" />
+                                        <div class="payment" id="d{{ message['post_id'] }}">
+                                            <div class="alert alert-danger" role="alert">
+                                                <h5>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+                                                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                                                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                                                    </svg>
+                                                    Notice
+                                                </h5>
+                                                <p style="line-height: 1;">Your are entering the amount in ether, if your balance is less then the amount your are entering the transaction will be cancelled automatically</p>
+                                            </div>
+                                            <div>
+                                                <input type="number" class="form-control" placeholder="Enter the amount to transfer" id="id{{ message['post_id'] }}"/>
+                                            </div>
+                                            <div style="display: flex; width: 100%; height: fit-content; flex-direction: row; justify-content: space-evenly;">
+                                                <input type="button" id="follow" style="width: 80px; font-size: 15px;" value="cancel" onclick="Cancel()"/>
+                                                <input type="button" id="follow" style="width: 80px; font-size: 15px;" value="pay" onclick="Pay()"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="description">
                                 <p id="describe">{{ message['description'] }}</p>
@@ -520,11 +624,11 @@
                                 <video width="650" height="550" autoplay controls muted src="{{url_for('file', filename=message['video'])}}"></video>
                             </div>
                             <div class="votebox">
-                                <div class="plus" id="{{ message['post_id'] }}">
+                                <div class="plus">
                                     <input type="button" value="+" onclick="Vote('plus')" id="plus" />
                                 </div>
                                 <p id="vote">{{ message['net_vote'] }}</p>
-                                <div class="minus" id="{{ message['post_id'] }}">
+                                <div class="minus">
                                     <input type="button" value="-" onclick="Vote('minus')" id="minus" />
                                 </div>
                             </div>
@@ -553,8 +657,11 @@
                                     <div class="comment_box" id="{{ message1['comment_id'] }}">
                                         <div style="position: relative; width: 100%; height: fit-content; display: flex; flex-direction: row; justify-content: space-between;">
                                             <div style="display: flex; justify-content: space-between;">
-                                                <p style="font-weight: bold; padding-right: 4px;padding-bottom: 3px; font-size: 18px; justify-content: center;">{{ message1['username'] }}</p>
-                                                <p style="padding-left: 4px; padding-top: 3px; font-size: 13px; justify-content: center;">{{ message1['hours'] }} hours ago</p>
+                                                <div style="position: relative; top: 3px; height: 90%; width: 45px; padding-left: 5px; display: flex; justify-content: center; align-items: center;">
+                                                    <img style="border-radius: 50%; background-color: #efefef; border: 1px solid black; " src="{{ message1['avatar'] }}" width="100%" height="100%">
+                                                </div>
+                                                <p style="font-weight: bold; padding-right: 3px;padding-bottom: 3px; padding-left: 4px; font-size: 18px; display: flex; justify-content: center; align-items: center;">{{ message1['username'] }}</p>
+                                                <p style="padding-left: 3px; padding-bottom: 4px; font-size: 13px; display: flex; justify-content: center; align-items: center;">{{ message1['hours'] }} hours ago</p>
                                             </div>
                                             <button onclick="display()" style="border: none; background-color: #ffffff;" id="{{ message1['comment_id'] }}">
                                                 <div class="icon">
@@ -582,8 +689,11 @@
                                                 <div class="reply">
                                                     <div style="position: relative; width: 100%; height: fit-content; display: flex; flex-direction: row; justify-content: space-between;">
                                                         <div style="display: flex; justify-content: space-between;">
-                                                            <p style="font-weight: bold; padding-right: 4px; padding-bottom: 5px; font-size: 15px; justify-content: center; opacity: 0.8;">Replyed by {{ message2['username'] }}</p>
-                                                            <p style="padding-left: 4px; font-size: 13px; justify-content: center;">{{ message2['hours'] }} hours ago</p>
+                                                            <div style="position: relative; top: 3px; height: 90%; width: 45px; padding-left: 5px; display: flex; justify-content: center; align-items: center;">
+                                                                <img style="border-radius: 50%; background-color: #efefef; border: 1px solid black; " src="{{ message2['avatar'] }}" width="100%" height="100%">
+                                                            </div>
+                                                            <p style="font-weight: bold; padding-right: 3px; padding-left: 4px; padding-bottom: 5px; font-size: 15px; display: flex; justify-content: center; align-items: center; opacity: 0.8;">Replyed by {{ message2['username'] }}</p>
+                                                            <p style="padding-left: 3px; padding-bottom: 5px; font-size: 13px; display: flex; justify-content: center; align-items: center;">{{ message2['hours'] }} hours ago</p>
                                                         </div>
                                                     </div>
                                                     <div style="position: relative; width: 100%; height: fit-content; border-radius: 5px; background: #F8F8F8; padding: 5px 7px; box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);">
@@ -618,6 +728,7 @@
             const searchWrapper= document.querySelector('.search_box')
             const suggBox= searchWrapper.querySelector('.autocom_box')
             let emptyArray= [];
+            let startIndex;
 
             fetch("/suggest", {
                 method: "GET"
@@ -635,12 +746,19 @@
                 setTimeout(function(){
                     emptyArray= emptyArray.filter((data) =>{
                         if (data.toUpperCase().indexOf(searchbox) > -1){
-                            console.log(data.toUpperCase().indexOf(searchbox))
+                            startIndex=data.toUpperCase().indexOf(searchbox);
                             return data
                         }
                     });
                     emptyArray= emptyArray.map((data) =>{
-                        return '<li>'+ data +'</li>';
+                        if(startIndex==0){
+                            let result=[data.slice(startIndex, searchbox.length), data.slice(searchbox.length)];
+                            return '<li>'+ '<b>'+ result[0]+'</b>'+ result[1] +'</li>';
+                        }
+                        else{
+                            let result=[data.slice(0,data.toUpperCase().indexOf(searchbox)), data.slice(data.toUpperCase().indexOf(searchbox), data.toUpperCase().indexOf(searchbox)+searchbox.length), data.slice(data.toUpperCase().indexOf(searchbox)+searchbox.length)];
+                            return '<li>'+ result[0]+'<b>'+result[1]+'</b>'+result[2] +'</li>';
+                        }
                     });
                     searchWrapper.classList.add('active');
                     suggestion(emptyArray);
@@ -656,7 +774,7 @@
             const searchbox= document.getElementById('search_input').value.toLowerCase();
             if(!list.length){
                 value= searchbox;
-                listData= '<li>'+ value +'</li>'
+                listData= '<li>'+ 'no user found' +'</li>';
             }else{
                 listData= list.join('');
             }
@@ -683,6 +801,252 @@
                     window.location.href= data.redirect
                 })
             }
+    </script>
+    <script>
+        const Vote = (vote) =>{
+            var rowId = event.target.parentNode.parentNode.parentNode.id;
+            // create own form in memory
+            const formData = new FormData();
+
+            // set values in this form
+            formData.append("button", rowId);
+            formData.append("from", "comment");
+            formData.append("vote", vote)
+
+            fetch("/vote", {
+                method: "POST",
+                body: formData
+                //headers: {'Content-Type': 'application/json'},
+                //body: JSON.stringify(formData)
+            }).then((response) =>{
+                return response.json()
+            }).then((data) =>{
+                window.location.href=data.redirect+`?pid=${rowId}`
+            })
+            }
+    </script>
+    <script>
+        let account;
+        let public_key;
+        let username;
+        const accountBoot = async() =>{
+            if(window.ethereum !== 'undefined'){
+                    ethereum.request({method: "eth_requestAccounts"}).then((accounts) =>{
+                        account=accounts[0];
+                        // console.log(account);
+                        // document.getElementById('account').innerHTML= account;
+                });
+
+                const ABI= [
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"name": "Response",
+		"type": "event"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"inputs": [],
+		"name": "_owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "checkBalance",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "user",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct WalletManage.Wallet",
+				"name": "",
+				"type": "tuple"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			}
+		],
+		"name": "createWallet",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "getTransaction",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "username",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "key",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct WalletManage.TranscationHistory[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_receiver",
+				"type": "address"
+			}
+		],
+		"name": "refundTransfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "j",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_username",
+				"type": "string"
+			}
+		],
+		"name": "support",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	}
+];
+                const Address= "0xAb5df0B83B21fb5Af854fBb93dd68Ccd14bC412B";
+                window.web3= await new Web3(window.ethereum);
+                window.contract = await new window.web3.eth.Contract(ABI, Address);
+                // document.getElementById('connect').innerHTML= "connected to smart contract";
+                // const data = await window.contract.methods._owner().call();
+                // const data1= await window.contract.methods.checkBalance().call();
+                // const amount= document.getElementById('amount').value;
+            }
+            else{
+                alert('Install metamsk and link your wallet to support');
+            }
+        }
+        
+        const Pay = async() =>{
+            var Id = event.target.parentNode.parentNode.id;
+            var Id2 = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+            let amount = document.getElementById('i'+Id).value;
+            var loader= document.getElementById("preloader");
+            loader.style.display = "flex";
+            fetch(`/key?pid=${Id2}`, {
+                method: "GET"
+            }).then((response) =>{
+                return response.json()
+            }).then((data) =>{
+                console.log(data);
+                public_key = data['data'][0]['public_key'];
+                username = data['data'][0]['username'];
+                console.log(public_key);
+                window.contract.methods.support(public_key, username).send({from: account,value: web3.utils.toWei(amount, 'ether')}).then((tx) =>{
+                    console.log(tx);
+                    loader.style.display = "none";
+                    fetch(`/support_money?pid=${Id2}&amount=${amount}`, {
+                        method: "GET"
+                    }).then((response) =>{
+                        return response.json()
+                    })
+                }).catch((err) =>{
+                    loader.style.display = "none";
+                    console.log(err);
+                })
+            })
+        }
+    </script>
+    <script>
+        const Support = () =>{
+            var Id = event.target.parentNode.parentNode.parentNode.id;
+            document.getElementById('d'+Id).style.display='flex';
+        }
+        const Cancel = () =>{
+            var Id = event.target.parentNode.parentNode.id;
+            document.getElementById(Id).style.display='none';
+        }
     </script>
 </body>
 </html>
